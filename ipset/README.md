@@ -1,14 +1,14 @@
-####### Zabbix IPset Template
+Zabbix IPset Template
 
-###A Zabbix template for ipset monitoring.
+Zabbix template for ipset monitoring.
 
-###Author: Maxim Stepanuk (stepanukmaxim@icloud.com)
+Author: Maxim Stepanuk (stepanukmaxim@icloud.com)
 
-##Requires
+Requires
 
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
-##Metrics
+Metrics
 |------------------|------------------------------------------------------------------------------------|
 |      Metric      | Description                                                                        |
 |------------------|------------------------------------------------------------------------------------|
@@ -23,7 +23,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 | ipset.service    | Status service                                                                     |
 |------------------|------------------------------------------------------------------------------------|
 
-##Triggers
+Triggers
 |-----------------------|-------------------------------------------------------------------------------|
 |     Trigger           |  Description                                                                  |
 |-----------------------|-------------------------------------------------------------------------------|
@@ -32,7 +32,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 | IPset service is down | Status service                                                                |
 |-----------------------|-------------------------------------------------------------------------------|
 
-##Installation
+Installation
 
 You need to configure servers as shown below:
 
@@ -52,7 +52,7 @@ zabbix  ALL=NOPASSWD: /usr/sbin/ipset list *
 
 Import "template_ipset.xml" into zabbix as template
 
-##Testing
+Testing
 
 zabbix_get -s <ip> -k 'ipset.discovery'
 zabbix_get -s <ip> -k 'ipset.members["<name_ipset>"]'
