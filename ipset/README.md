@@ -12,21 +12,21 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 |                  |                                                                                    |
 |      Metric      | Description                                                                        |
 | ipset.discovery  | Automatically recognize ipsets on the server                                       |
-|------------------|------------------------------------------------------------------------------------|
 | ipset.newmembers | Showing new blocked ip addresses in the ipset list (applies only to ipset timeout) |
 |                  | Example:                                                                           |
 |                  | ipset create <name_ipset> hash:ip (hash:net) timeout 3600                          |
-|------------------|------------------------------------------------------------------------------------|
+|.                 |                                                                                    |
 | ipset.members    | Show membership in ipsets                                                          |
-|------------------|------------------------------------------------------------------------------------|
+|                  |------------------------------------------------------------------------------------|
 | ipset.service    | Status service                                                                     |
-|------------------|------------------------------------------------------------------------------------|
+|                  |------------------------------------------------------------------------------------|
 
 ### Triggers
 |                       |                                                                               |
 |     Trigger           |  Description                                                                  |
 | IP blocked            | IP blocked for time in ipset                                                  |
 | IPset service is down | Status service                                                                |
+|                       |                                                                               |
 
 ## Installation
 
