@@ -9,7 +9,7 @@
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
 ### Metrics
-
+|                  |                                                                                    |
 |      Metric      | Description                                                                        |
 | ipset.discovery  | Automatically recognize ipsets on the server                                       |
 |------------------|------------------------------------------------------------------------------------|
@@ -23,7 +23,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 |------------------|------------------------------------------------------------------------------------|
 
 ### Triggers
-
+|                       |                                                                               |
 |     Trigger           |  Description                                                                  |
 | IP blocked            | IP blocked for time in ipset                                                  |
 | IPset service is down | Status service                                                                |
