@@ -24,6 +24,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 ### Triggers
 |                       |                                                                               |
 |     Trigger           |  Description                                                                  |
+|-----------------------|-------------------------------------------------------------------------------|
 | IP blocked            | IP blocked for time in ipset                                                  |
 | IPset service is down | Status service                                                                |
 |                       |                                                                               |
