@@ -1,0 +1,2 @@
+zabbix  ALL=NOPASSWD: /usr/sbin/ipset list
+zabbix  ALL=NOPASSWD: /usr/sbin/ipset list *

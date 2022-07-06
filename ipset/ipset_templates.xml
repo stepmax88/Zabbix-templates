@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2022-07-06T11:05:05Z</date>
+    <groups>
+        <group>
+            <name>Template/SMIDA</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>IPSET</template>
+            <name>IPSET</name>
+            <description>IPset template for Zabbix&#13;
+============================&#13;
+**Features:**&#13;
+Automatic discovery of ipset&#13;
+Monitor service status&#13;
+Monitor ipsets ban&#13;
+&#13;
+## Author&#13;
+&#13;
+Maxim Stepanuk</description>
+            <groups>
+                <group>
+                    <name>Template/SMIDA</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>ipset</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>IPset service is running</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>ipset.service</key>
+                    <applications>
+                        <application>
+                            <name>ipset</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=0</expression>
+                            <name>IPset service is down on {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>ipset discovery</name>
+                    <key>ipset.discovery</key>
+                    <delay>30</delay>
+                    <lifetime>7d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>IPset members: $1</name>
+                            <key>ipset.members[{#IPSET}]</key>
+                            <history>3d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>ipset</name>
+                                </application>
+                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>ipset</name>
+                                </application_prototype>
+                            </application_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Ban IP ipset: $1</name>
+                            <key>ipset.newmembers[{#IPSET}]</key>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>ipset</name>
+                                </application>
+                            </applications>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>ipset</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{strlen()}&gt;1</expression>
+                                    <recovery_mode>NONE</recovery_mode>
+                                    <name>IP blocked for 1 hour: ipset {#IPSET}</name>
+                                    <priority>HIGH</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+    <value_maps>
+        <value_map>
+            <name>Service state</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Down</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Up</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
