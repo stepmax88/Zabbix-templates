@@ -34,7 +34,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 |     Trigger                  |  Description                         |
 |------------------------------|--------------------------------------|
 | Change patroni role          | AVERAGE: Change role Master/Replica  |
-| IPset service is down        | HIGH: Status service                 |
+| Patroni service is down      | HIGH: Status service                 |
 | Change patroni configuration | INFO: Change configuration.          |
 | Change patroni leader        | HIGH: Change leader                  |
 | Change patroni version       | INFO: Change version                 |
@@ -60,6 +60,6 @@ Import "template_patroni.xml" into zabbix as template
 
 ## Testing
 
-zabbix_get -s <ip> -k ''
-zabbix_get -s <ip> -k '["<name>"]'
-zabbix_get -s <ip> -k ''
+> zabbix_get -s <ip> -k ''
+> zabbix_get -s <ip> -k '["<name>"]'
+> zabbix_get -s <ip> -k ''
