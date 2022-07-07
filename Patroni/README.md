@@ -9,10 +9,10 @@
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
 ## Metrics
-|      Metric                                      | Description                                       |
-|--------------------------------------------------|---------------------------------------------------|
-| Patroni service is running                       | Status service                                    |
-| Patroni info: Patroni version                    |                                                   |
+|      Metric                                      | Description         |
+|--------------------------------------------------|---------------------|
+| Patroni service is running                       | Status service      |
+| Patroni info: Patroni version                    | Version Patroni app |
 | Patroni info: Patroni state.                     |
 | Patroni info: Patroni scope.                     |
 | Patroni info: Patroni role.                      |
@@ -26,7 +26,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 | Patroni config: pql - shared_buffers             |
 | Patroni config: pql - port                       |
 | Patroni config: pql - maintenance_work_mem       |
-| Patroni cluster: Name members        	           |                 |
+| Patroni cluster: Name members        	           |                     |
 
 
 
