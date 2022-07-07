@@ -9,10 +9,10 @@
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
 ## Metrics
-|      Metric                                      | Description                                                                        |
-|--------------------------------------------------|------------------------------------------------------------------------------------|
-| Patroni service is running                       |
-| Patroni info: Patroni version                    |
+|      Metric                                      | Description                                       |
+|--------------------------------------------------|---------------------------------------------------|
+| Patroni service is running                       | Status service                                    |
+| Patroni info: Patroni version                    |                                                   |
 | Patroni info: Patroni state.                     |
 | Patroni info: Patroni scope.                     |
 | Patroni info: Patroni role.                      |
