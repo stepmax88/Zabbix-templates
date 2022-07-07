@@ -1,6 +1,6 @@
-####### Zabbix Patroni Template
+# Zabbix Patroni Template
 
-###A Zabbix template for patroni monitoring.
+## Zabbix template for patroni monitoring.
 
 ### Author: Maxim Stepanuk (stepanukmaxim@icloud.com)
 
