@@ -8,13 +8,12 @@
 
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
-##Metrics
+## Metrics
 |      Metric      | Description                                                                        |
 |------------------|------------------------------------------------------------------------------------|
-| ipset.discovery  | Automatically recognize ipsets on the server                                       |
+|   |                                       |
 
-
-##Triggers
+## Triggers
 |     Trigger                  |  Description                         |
 |------------------------------|--------------------------------------|
 | Change patroni role          | Change role Master/Replica           |
@@ -22,7 +21,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 | Change patroni configuration | 
 | Change patroni leader        | 
 
-##Installation
+## Installation
 
 You need to configure servers as shown below:
 
@@ -34,18 +33,14 @@ Copy "patroni.conf" into your zabbix_agent include folder (default: /etc/zabbix/
 > ***UserParameter***=patroni.history[*], curl -s http://$1:$2/history
 > ***UserParameter***=patroni.discovery[*], curl -s http://$1:$2/cluster | jq '.members[].name' | sed -e ':a;N;$$!ba;s/\n/ /g' -e s/\"//g -e 's/\(\w\+[^ ]*\)/{"{#MEMBERS}":"\1"}/g' -e 's/.*/{"data":[\0]}/' -e 's/ /,/g'
 > ***UserParameter***=patroni.discoverymembers.lag[*], curl -s --get http://$2:$3/cluster | jq . | grep -A 8 -B 1 $1 | sed 's/},/}/g'
-# If you use DCS=Consul
+### If you use DCS=Consul
 > ***UserParameter***=patroni.leader[*], curl --header "X-Consul-Token: $1" -s --get http://localhost:8500/v1/kv/service/$2/leader | jq -r '.[0]["Value"]' | base64 -d
 
-
 Restart zabbix_agent
-
-
-
 Import "template_patroni.xml" into zabbix as template
 
-##Testing
+## Testing
 
-zabbix_get -s <ip> -k 'ipset.discovery'
-zabbix_get -s <ip> -k 'ipset.members["<name_ipset>"]'
-zabbix_get -s <ip> -k 'ipset.service'
+zabbix_get -s <ip> -k ''
+zabbix_get -s <ip> -k '["<name>"]'
+zabbix_get -s <ip> -k ''
