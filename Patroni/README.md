@@ -9,26 +9,26 @@
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
 ## Metrics
-|      Metric                                      | Description         |
+| Metric                                           | Description         |
 |--------------------------------------------------|---------------------|
 | Patroni service is running                       | Status service      |
 | Patroni info: Patroni version                    | Version Patroni app |
-| Patroni info: Patroni state.                     |
-| Patroni info: Patroni scope.                     |
-| Patroni info: Patroni role.                      |
-| Patroni info: Patroni database_system_identifier |
-| Patroni info: Patroni pending_restart            |
-| Patroni config: Ttl                              | 
-| Patroni config: Retry_timeout                    |
-| Patroni config: Loop_wait                        |
-| Patroni config: Maximum_lag_on_failover          |
-| Patroni config: pql - work_mem                   |
-| Patroni config: pql - shared_buffers             |
-| Patroni config: pql - port                       |
-| Patroni config: pql - maintenance_work_mem       |
-| Patroni cluster: Name members        	           |                     |
+| Patroni info: Patroni state.                     |                     |
+| Patroni info: Patroni scope.                     |                     |
+| Patroni info: Patroni role.                      |                     |
+| Patroni info: Patroni database_system_identifier |                     |
+| Patroni info: Patroni pending_restart            |                     |
+| Patroni config: Ttl                              |                     |
+| Patroni config: Retry_timeout                    |                     |
+| Patroni config: Loop_wait                        |                     |
+| Patroni config: Maximum_lag_on_failover          |                     |
+| Patroni config: pql - work_mem                   |                     |
+| Patroni config: pql - shared_buffers             |                     |
+| Patroni config: pql - port                       |                     |
+| Patroni config: pql - maintenance_work_mem       |                     |
+| Patroni cluster: Name members        	        |  Name Members       |
 
-
+;
 
 ## Triggers
 |     Trigger                  |  Description                         |
