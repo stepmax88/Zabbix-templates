@@ -26,9 +26,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 | Patroni config: pql - shared_buffers             |                     |
 | Patroni config: pql - port                       |                     |
 | Patroni config: pql - maintenance_work_mem       |                     |
-| Patroni cluster: Name members        	        | Name Members        |
-
-;
+| Patroni cluster: Name members                    |  Name Members       |
 
 ## Triggers
 |     Trigger                  |  Description                         |
