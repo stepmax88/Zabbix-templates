@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2024-01-25T15:35:08Z</date>
+    <groups>
+        <group>
+            <uuid>a571c0d144b14fd4a87a9d9b2aa9fcd6</uuid>
+            <name>Templates/Applications</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>771f6fe0b62e48f48f9360e59ade7193</uuid>
+            <template>Template Strongswan</template>
+            <name>Template Strongswan</name>
+            <description>## Author - Maxim Stepanuk
+
+Storngswan template for Zabbix
+============================
+**Features:**
+Automatic discovery of ipsec connection
+Monitor service status</description>
+            <groups>
+                <group>
+                    <name>Templates/Applications</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>a7d3691df9c34955bfb54f4f95e8a975</uuid>
+                    <name>StrongSWAN charon process</name>
+                    <key>proc.num[charon]</key>
+                    <history>1w</history>
+                    <trends>90d</trends>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Strongswan</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>2f3b572f107149c984e47fb6cee806ce</uuid>
+                    <name>StrongSWAN starter process</name>
+                    <key>proc.num[starter]</key>
+                    <history>1w</history>
+                    <trends>90d</trends>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Strongswan</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>02f5c1d4854b411ab49a532b12792a84</uuid>
+                            <expression>last(/Template Strongswan/proc.num[starter])&lt;1</expression>
+                            <name>IPSEC daemon StrongSwan not running on {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>9a4e372ace22417d809c9727ba48196f</uuid>
+                    <name>IPSEC discovery</name>
+                    <key>ipsec.discovery</key>
+                    <delay>2m;60s/1-7,00:00-24:00</delay>
+                    <lifetime>3600</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>24a2606d23304856883158976d993c46</uuid>
+                            <name>IPsec IP - {#CONNAME}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>ipsec.conip[{#CONNAME}]</key>
+                            <delay>3m</delay>
+                            <history>1w</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>3600</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Strongswan</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>bb4545dd7f5744a8acb9e2f96c1bf1f6</uuid>
+                            <name>IPsec name</name>
+                            <key>ipsec.conname[&quot;{#CONNAME}&quot;]</key>
+                            <history>1w</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Strongswan-echo</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>29647c5944df4ed0bae6d9b96eb2d724</uuid>
+                            <name>IPsec remote ping - {#CONNAME} ({#CONIP})</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>ipsec.ping[{#CONIP}]</key>
+                            <history>1w</history>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>Ping state</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Strongswan</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>953f584f818e491d9c36cca7dc62b53f</uuid>
+                            <name>IPsec state - {#CONNAME} ({#CONIP})</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>ipsec.state[{#CONNAME}]</key>
+                            <history>1w</history>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>Service state</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Strongswan</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <uuid>ea678a9862894e398bff7effad892ece</uuid>
+                            <expression>(last(/Template Strongswan/ipsec.ping[{#CONIP}])&lt;1 and last(/Template Strongswan/ipsec.state[{#CONNAME}])&gt;0 and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])&lt;&gt;{$NAME_IPSEC_HIGH} and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])&lt;&gt;{$NAME_IPSEC_CRITICAL}) or (last(/Template Strongswan/ipsec.state[{#CONNAME}])=0 and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])&lt;&gt;{$NAME_IPSEC_HIGH} and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])&lt;&gt;{$NAME_IPSEC_CRITICAL})</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>nodata(/Template Strongswan/ipsec.state[{#CONNAME}],3)=1</recovery_expression>
+                            <name>IPSEC VPN is down on {HOST.NAME}: {#CONNAME} ({#CONIP})</name>
+                            <priority>WARNING</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <uuid>9c18d87e3e1b4769b105332807b2482c</uuid>
+                            <expression>(last(/Template Strongswan/ipsec.ping[{#CONIP}])&lt;1 and last(/Template Strongswan/ipsec.state[{#CONNAME}])&gt;0 and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])={$NAME_IPSEC_CRITICAL}) or last(/Template Strongswan/ipsec.state[{#CONNAME}])&lt;1 and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])={$NAME_IPSEC_CRITICAL}</expression>
+                            <name>IPSEC VPN is down on {HOST.NAME}: {#CONNAME} ({#CONIP})</name>
+                            <priority>DISASTER</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <uuid>b7021cec50a14607aa7b23b0212e7f73</uuid>
+                            <expression>(last(/Template Strongswan/ipsec.ping[{#CONIP}])&lt;1 and last(/Template Strongswan/ipsec.state[{#CONNAME}])&gt;0 and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])={$NAME_IPSEC_HIGH}) or last(/Template Strongswan/ipsec.state[{#CONNAME}])&lt;1 and last(/Template Strongswan/ipsec.conname[&quot;{#CONNAME}&quot;])={$NAME_IPSEC_HIGH}</expression>
+                            <name>IPSEC VPN is down on {HOST.NAME}: {#CONNAME} ({#CONIP})</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$NAME_IPSEC_CRITICAL}</macro>
+                    <description>This is an expression for trigger critical strongswan</description>
+                </macro>
+                <macro>
+                    <macro>{$NAME_IPSEC_HIGH}</macro>
+                    <description>This is an expression for trigger high strongswan</description>
+                </macro>
+            </macros>
+            <valuemaps>
+                <valuemap>
+                    <uuid>4fb1508be6cd489cb006a52a93076e24</uuid>
+                    <name>Ping state</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>ping</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>not ping</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>6c61977e66ec4e01b026760222925153</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+</zabbix_export>
