@@ -1,1 +1,1 @@
-### Monitoring
+### Zabbix Templates
