@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2024-01-25T13:13:21Z</date>
+    <groups>
+        <group>
+            <uuid>da25809f817f42e8a02d824407d94b43</uuid>
+            <name>Template/SMIDA</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>8965b107ec9e4505b5835aa83c167438</uuid>
+            <template>Template netfilter</template>
+            <name>Template netfilter</name>
+            <description>## Author - Maxim Stepanuk
+
+Netfilter template for Zabbix
+============================
+**Features:**
+Automatic discovery of ipset
+Monitor service status
+Monitor list ipsets and list ipsets timeout members</description>
+            <groups>
+                <group>
+                    <name>Template/SMIDA</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>5dd71e5db320458081bf7065c490686c</uuid>
+                    <name>IPset service is running</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service.ipset</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Netfilter</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>bca7a7dcff4d42ed9b6b34c7879b6d1f</uuid>
+                            <expression>last(/Template netfilter/service.ipset)=0</expression>
+                            <name>IPset service is down on {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>7e473018c019435daadd40a59f825eaf</uuid>
+                    <name>IPtables service is running</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service.iptables</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Netfilter</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a6e52fe5f6f74b3f8115d64a97069c1c</uuid>
+                            <expression>last(/Template netfilter/service.iptables)=0</expression>
+                            <name>IPtables service is down on {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>6d294568c15242caa0db2cf9f953789f</uuid>
+                    <name>Netfilter service is running</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>service.netfilter</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Netfilter</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>6a2d49540df04c04adfdaefa63660591</uuid>
+                    <name>discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>ipset.discovery</key>
+                    <delay>30s</delay>
+                    <lifetime>3600</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>6bcc90121d524cc9a64fcc146708c95f</uuid>
+                            <name>IPset: {#IPSET} ({#IP})</name>
+                            <key>ipset.members[{#IPSET},{#IP}]</key>
+                            <history>1d</history>
+                            <valuemap>
+                                <name>Members state</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>CHECK_NOT_SUPPORTED</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                    <error_handler>CUSTOM_VALUE</error_handler>
+                                    <error_handler_params>4</error_handler_params>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>120</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Netfilter</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>b0b1205d65f441c997b924af64b69d18</uuid>
+                                    <expression>last(/Template netfilter/ipset.members[{#IPSET},{#IP}],#1)=1 and sum(/Template netfilter/ipset.members[{#IPSET},{#IP}],5m)=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>sum(/Template netfilter/ipset.members[{#IPSET},{#IP}],5m)&gt;2</recovery_expression>
+                                    <name>{#IP} add in {#IPSET} ipset</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>90cf62f6c97342d1bfaf412e54d9a0a1</uuid>
+                                    <expression>last(/Template netfilter/ipset.members[{#IPSET},{#IP}])=0</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>sum(/Template netfilter/ipset.members[{#IPSET},{#IP}],5m)=0</recovery_expression>
+                                    <name>{#IP} remove in {#IPSET} ipset</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>770bdd35dbcd4459a967288b4f263bfb</uuid>
+                            <name>Add members in ipset: {#TIMEIPSET} ({#TIMEIP}) timeout {#TIMEOUT}s</name>
+                            <key>ipset.time_members[{#TIMEIPSET},{#TIMEIP}]</key>
+                            <delay>30s</delay>
+                            <history>1w</history>
+                            <value_type>FLOAT</value_type>
+                            <units>s</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHECK_NOT_SUPPORTED</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                    <error_handler>CUSTOM_VALUE</error_handler>
+                                    <error_handler_params>0</error_handler_params>
+                                </step>
+                                <step>
+                                    <type>STR_REPLACE</type>
+                                    <parameters>
+                                        <parameter>&quot;&quot;</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Netfilter</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>636e6b5ae020452785f1e332b9ebe401</uuid>
+                                    <expression>last(/Template netfilter/ipset.time_members[{#TIMEIPSET},{#TIMEIP}])&gt;1</expression>
+                                    <name>{#TIMEIP} add in ipset {#TIMEIPSET} on {#TIMEOUT}s</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <valuemaps>
+                <valuemap>
+                    <uuid>0e7086f6fd234f33890b0fcb8b5d5b5f</uuid>
+                    <name>Members state</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Added</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Deleted</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>No members</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>8130107a5afc4b57b40288f98e629fa0</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>d92861fa7cb14c96b77a8143437b1845</uuid>
+            <expression>last(/Template netfilter/service.netfilter)=0 and last(/Template netfilter/service.ipset)=0 and last(/Template netfilter/service.iptables)=0</expression>
+            <name>Netfilter service is down on {HOST.NAME}</name>
+            <priority>HIGH</priority>
+            <manual_close>YES</manual_close>
+        </trigger>
+    </triggers>
+</zabbix_export>
