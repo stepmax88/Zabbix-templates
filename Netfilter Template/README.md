@@ -64,36 +64,23 @@ add that UserParameter to config:
 ##### EXAMPLE:
 
         zabbix_get -s <ip> -k 'ipset.discovery'
+#
+{
+        "data":[
 
-`{`
+        {
+                "{#IPSET}":"<name_ipset>",
+                "{#IP}":"<ip_addresses>"
+        }
+        ,
+        {
+                "{#IPSET}":"<name_ipset>",
+                "{#IP}":"<ip_addresses>"
+        }
 
-`  "data":[`
-
-`    {`
-
-`      "{#IPSET}":"<name_ipset>",`
-
-`      "{#IP}":"<ip_addresses>"`
-
-`    }`
-
-`    ,`
-
-`    {`
-
-`      "{#TIMEIPSET}":"<name_ipset>",`
-
-`      "{#TIMEIP}":"<ip_addresses>",`
-
-`      "{#TIMEOUT}":"<ipset_timeout>"`
-
-`    }`
-
-`  ]`
-
-`}`
-
-
+        ]
+}
+#
         zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
 #
         zabbix_get -s <ip> -k 'service.netfilter'
