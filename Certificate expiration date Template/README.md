@@ -1,5 +1,5 @@
 
-![](/Users/maximstepanuk/PycharmProjects/Zabbix Templates/Certificate expiration date Template/zabbix.png "Certificate expiration date template")
+![Certificate expiration date template](../zabbix.png "Certificate expiration date template")
 
 # Certificate expiration date Template
 
