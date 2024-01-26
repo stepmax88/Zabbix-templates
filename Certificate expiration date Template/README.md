@@ -41,12 +41,12 @@ Import "template_cert_expire_date.xml" into zabbix as template
 
 ## Testing
 
-> [zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]']
+        zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]'
 
 #### EXAMPLE:
 
 
-  {
+   {
         "data":[
         {
                 "{#SITE}":"amazon.com:443",
@@ -58,6 +58,6 @@ Import "template_cert_expire_date.xml" into zabbix as template
                 "{#DAYS_EXPIRE}":"60"
         }
         ]
-  }
+   }
 
-zabbix_get -s <ip> -k 'ssl.days[<site>:443]'
+        zabbix_get -s <ip> -k 'ssl.days[<site>:443]'
