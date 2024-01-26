@@ -44,7 +44,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 
     zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]'    
 
-___
+***
 
     {
         "data":[
@@ -59,11 +59,7 @@ ___
         }
         ]
     }
-         
 
-   
-___
-
-
+***
 
     zabbix_get -s <ip> -k 'ssl.days[<site>:443]'
