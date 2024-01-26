@@ -65,21 +65,21 @@ add that UserParameter to config:
 
         zabbix_get -s <ip> -k 'ipset.discovery'
 #
-{
-        "data":[
-
         {
-                "{#IPSET}":"<name_ipset>",
-                "{#IP}":"<ip_addresses>"
-        }
-        ,
-        {
-                "{#IPSET}":"<name_ipset>",
-                "{#IP}":"<ip_addresses>"
-        }
+                "data":[
 
-        ]
-}
+                {
+                        "{#IPSET}":"<name_ipset>",
+                        "{#IP}":"<ip_addresses>"
+                }
+                ,
+                {
+                        "{#IPSET}":"<name_ipset>",
+                        "{#IP}":"<ip_addresses>"
+                }
+
+                ]
+        }
 #
         zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
 #
