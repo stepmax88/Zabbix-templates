@@ -1,3 +1,5 @@
+![Certificate expiration date template](https://upload.wikimedia.org/wikipedia/commons/b/bf/Zabbix_logo.png "Certificate expiration date template")
+
 # Zabbix Template Netfilter (ipset, iptables)
 
 ## Zabbix template for ipset and iptables monitoring.
@@ -35,63 +37,62 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 
 ## Installation
 
-You need to configure servers as shown below:
+### You need to configure servers as shown below:
 
-Copy "netfilter.conf" into your zabbix_agent include folder (default: /etc/zabbix/zabbix_agentd.d/) or manually 
+1. Copy "netfilter.conf" into your zabbix_agent include folder (default: /etc/zabbix/zabbix_agentd.d/) or manually 
 add that UserParameter to config:
 
-> ***UserParameter***=ipset.discovery, /etc/zabbix/zabbix-netfilter.pl 2>/dev/null
 
-> ***UserParameter***=ipset.members[*],if [ "$2" = 'No members' ]; then echo '2'; else sudo ipset list $1 | 
-grep -x "$2" | cut -d' ' -f1 | wc -l; fi
+        UserParameter=ipset.discovery, /etc/zabbix/zabbix-netfilter.pl 2>/dev/null
+        UserParameter=ipset.members[*],if [ "$2" = 'No members' ]; then echo '2'; else sudo ipset list $1 | grep -x "$2" | cut -d' ' -f1 | wc -l; fi
+        UserParameter=ipset.time_members[*], sudo ipset list $1 | grep "$2" | cut -d' ' -f3
+        UserParameter=service.netfilter, systemctl | grep "netfilter-persistent.service" | wc -l
+        UserParameter=service.ipset, systemctl | grep "ipset.service" | wc -l
+        UserParameter=service.iptables, systemctl | grep "iptables.service" | wc -l
 
-> ***UserParameter***=ipset.time_members[*], sudo ipset list $1 | grep "$2" | cut -d' ' -f3
+2. Copy "zbx_netfilter.sudoers" into /etc/sudoers.d or manually add that rule:
 
-> ***UserParameter***=service.netfilter, systemctl | grep "netfilter-persistent.service" | wc -l
 
-> ***UserParameter***=service.ipset, systemctl | grep "ipset.service" | wc -l
+        zabbix  ALL=NOPASSWD: /usr/sbin/ipset list
+        zabbix  ALL=NOPASSWD: /usr/sbin/ipset list *
 
-> ***UserParameter***=service.iptables, systemctl | grep "iptables.service" | wc -l
-
-Restart zabbix_agent
-
-Copy "zbx_netfilter.sudoers" into /etc/sudoers.d or manually add that rule:
-
-> zabbix  ALL=NOPASSWD: /usr/sbin/ipset list
-
-> zabbix  ALL=NOPASSWD: /usr/sbin/ipset list *
-
-Import "template_netfilter.xml" into zabbix as template
-
-Copy "zabbix-netfilter.pl" into /etc/zabbix
+3. Import "template_netfilter.xml" into zabbix as template
+4. Copy "zabbix-netfilter.pl" into /etc/zabbix
+5. Restart zabbix_agent
 
 ## Testing
 
-> zabbix_get -s <ip> -k 'ipset.discovery'
+        zabbix_get -s <ip> -k 'ipset.discovery'
 
 ### EXAMPLE:
 
-"
-  {
-        "data":[
-        {
-                "{#IPSET}":"<name_ipset>",
-                "{#IP}":"<ip_addresses>"
-        }
-        ,
-        {
-                "{#TIMEIPSET}":"<name_ipset>",
-                "{#TIMEIP}":"<ip_addresses>",
-                "{#TIMEOUT}":"<ipset_timeout>"
-        }
-        ]
-   }
-"
 
-> zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
-  
-> zabbix_get -s <ip> -k 'service.netfilter'
- 
-> zabbix_get -s <ip> -k 'service.ipset'
+>  {
+>        "data":[
+>        {
+>                "{#IPSET}":"<name_ipset>",
+>                "{#IP}":"<ip_addresses>"
+>        }
+>        ,
+>        {
+>                "{#TIMEIPSET}":"<name_ipset>",
+>                "{#TIMEIP}":"<ip_addresses>",
+>                "{#TIMEOUT}":"<ipset_timeout>"
+>        }
+>        ]
+>  }
 
-> zabbix_get -s <ip> -k 'service.ipset'
+
+        zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
+
+
+
+        zabbix_get -s <ip> -k 'service.netfilter'
+
+
+
+        zabbix_get -s <ip> -k 'service.ipset'
+
+
+
+        zabbix_get -s <ip> -k 'service.ipset'
