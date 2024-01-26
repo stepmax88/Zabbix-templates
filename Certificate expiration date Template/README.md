@@ -28,7 +28,7 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 
 ### You need to configure servers as shown below:
 
-Copy "cert_expiration_date.conf" into your zabbix_agent include folder (default: /etc/zabbix/zabbix_agentd.d/) or manually add that UserParameter to config:
+* Copy "cert_expiration_date.conf" into your zabbix_agent include folder (default: /etc/zabbix/zabbix_agentd.d/) or manually add that UserParameter to config:
 
 
     UserParameter=ssl.discovery[*], echo "{\n\n\t\"data\":[\n\n$$(for h in $1; do echo "\t,\n\t{\n\t\t\"{#SITE}\":\"$$h\",\n \t\t\"{#DAYS_EXPIRE}\":\"$$(( ($$(date -d "$$(echo | openssl s_client -servername $$h -connect $$h 2>/dev/null | openssl x509 -noout -enddate | sed -e 's#notAfter=##')" '+%s') - $$(date '+%s')) / 86400 ))\"\n\t}"; done)\n\n\t]\n}\n" | sed -e '5d'
@@ -37,8 +37,8 @@ Copy "cert_expiration_date.conf" into your zabbix_agent include folder (default:
 
 *Note: Add the -e switch after echo if it doesn't work*
 
-- Restart zabbix_agent
-- Import "template_cert_expire_date.xml" into zabbix as template
+* Import "template_cert_expire_date.xml" into zabbix as template
+* Restart zabbix_agent
 
 ## Testing
 
