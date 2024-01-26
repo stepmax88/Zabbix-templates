@@ -1,5 +1,5 @@
 
-![Certificate expiration date template](../zabbix.png "Certificate expiration date template")
+![Certificate expiration date template](https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fb%2Fbf%2FZabbix_logo.png&tbnid=WYexJZhUYrkTTM&vet=12ahUKEwjG0a7YlPuDAxWSwwIHHSJ9CcEQMygBegQIARBR..i&imgrefurl=https%3A%2F%2Fen.m.wikipedia.org%2Fwiki%2FFile%3AZabbix_logo.png&docid=JY9E7vH8AG2R8M&w=500&h=131&q=zabbix%20png&ved=2ahUKEwjG0a7YlPuDAxWSwwIHHSJ9CcEQMygBegQIARBR "Certificate expiration date template")
 
 # Certificate expiration date Template
 
