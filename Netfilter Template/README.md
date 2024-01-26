@@ -67,7 +67,7 @@ add that UserParameter to config:
 ### EXAMPLE:
 
 
-  {
+{
         "data":[
         {
                 "{#IPSET}":"<name_ipset>",
@@ -80,7 +80,7 @@ add that UserParameter to config:
                 "{#TIMEOUT}":"<ipset_timeout>"
         }
         ]
-  }
+}
 
 
         zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
