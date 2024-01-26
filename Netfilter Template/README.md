@@ -37,11 +37,13 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 
 You need to configure servers as shown below:
 
-Copy "netfilter.conf" into your zabbix_agent include folder (default: /etc/zabbix/zabbix_agentd.d/) or manually add that UserParameter to config:
+Copy "netfilter.conf" into your zabbix_agent include folder (default: /etc/zabbix/zabbix_agentd.d/) or manually 
+add that UserParameter to config:
 
 > ***UserParameter***=ipset.discovery, /etc/zabbix/zabbix-netfilter.pl 2>/dev/null
 
-> ***UserParameter***=ipset.members[*],if [ "$2" = 'No members' ]; then echo '2'; else sudo ipset list $1 | grep -x "$2" | cut -d' ' -f1 | wc -l; fi
+> ***UserParameter***=ipset.members[*],if [ "$2" = 'No members' ]; then echo '2'; else sudo ipset list $1 | 
+grep -x "$2" | cut -d' ' -f1 | wc -l; fi
 
 > ***UserParameter***=ipset.time_members[*], sudo ipset list $1 | grep "$2" | cut -d' ' -f3
 
@@ -67,21 +69,24 @@ Copy "zabbix-netfilter.pl" into /etc/zabbix
 
 > zabbix_get -s <ip> -k 'ipset.discovery'
 
-# EXAMPLE:
-#  {
-#        "data":[
-#        {
-#                "{#IPSET}":"<name_ipset>",
-#                "{#IP}":"<ip_addresses>"
-#        }
-#        ,
-#        {
-#                "{#TIMEIPSET}":"<name_ipset>",
-#                "{#TIMEIP}":"<ip_addresses>",
-#                "{#TIMEOUT}":"<iset_timeout>"
-#        }
-#        ]
-#   }
+### EXAMPLE:
+
+"
+  {
+        "data":[
+        {
+                "{#IPSET}":"<name_ipset>",
+                "{#IP}":"<ip_addresses>"
+        }
+        ,
+        {
+                "{#TIMEIPSET}":"<name_ipset>",
+                "{#TIMEIP}":"<ip_addresses>",
+                "{#TIMEOUT}":"<ipset_timeout>"
+        }
+        ]
+   }
+"
 
 > zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
   
