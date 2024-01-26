@@ -1,10 +1,10 @@
-![Certificate expiration date template](https://upload.wikimedia.org/wikipedia/commons/b/bf/Zabbix_logo.png "Certificate expiration date template")
+![](https://upload.wikimedia.org/wikipedia/commons/b/bf/Zabbix_logo.png)
 
 # Zabbix Template Netfilter (ipset, iptables)
 
 ## Zabbix template for ipset and iptables monitoring.
 
-## Author: Maxim Stepanuk (stepanukmaxim@icloud.com)
+## Author: Maxim Stepanuk (stepanukmaxim@prostep.com.ua)
 
 ### Requires
 
@@ -61,24 +61,24 @@ add that UserParameter to config:
 5. Restart zabbix_agent
 
 ## Testing
-#### EXAMPLE:
+##### EXAMPLE:
 
         zabbix_get -s <ip> -k 'ipset.discovery'
 
-{
-  "data":[
-    {
-      "{#IPSET}":"<name_ipset>",
-      "{#IP}":"<ip_addresses>"
-    }
-    ,
-    {
-      "{#TIMEIPSET}":"<name_ipset>",
-      "{#TIMEIP}":"<ip_addresses>",
-      "{#TIMEOUT}":"<ipset_timeout>"
-    }
-  ]
-}
+`{`
+`  "data":[`
+`    {`
+`      "{#IPSET}":"<name_ipset>",`
+`      "{#IP}":"<ip_addresses>"`
+`    }`
+`    ,`
+`    {`
+`      "{#TIMEIPSET}":"<name_ipset>",`
+`      "{#TIMEIP}":"<ip_addresses>",`
+`      "{#TIMEOUT}":"<ipset_timeout>"`
+`    }`
+`  ]`
+`}`
 
 
         zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
