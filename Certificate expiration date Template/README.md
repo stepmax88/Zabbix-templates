@@ -41,25 +41,22 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 3. Restart zabbix_agent
 
 ## Testing
+##### EXAMPLE:
 
-    zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]'    
-
-***
-
-    {
-        "data":[
+    zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]'
+#
         {
-                "{#SITE}":"amazon.com:443",
-                "{#DAYS_EXPIRE}":"56"
+            "data":[
+            {
+                    "{#SITE}":"amazon.com:443",
+                    "{#DAYS_EXPIRE}":"56"
+            }
+            ,
+            {
+                    "{#SITE}":"google.com:443",
+                    "{#DAYS_EXPIRE}":"60"
+            }
+            ]
         }
-        ,
-        {
-                "{#SITE}":"google.com:443",
-                "{#DAYS_EXPIRE}":"60"
-        }
-        ]
-    }
-
-***
-
+#
     zabbix_get -s <ip> -k 'ssl.days[<site>:443]'
