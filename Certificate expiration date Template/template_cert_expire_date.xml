@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2024-01-26T12:28:00Z</date>
+    <groups>
+        <group>
+            <uuid>da25809f817f42e8a02d824407d94b43</uuid>
+            <name>Template/SMIDA</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>db93d57ba52f498a8f746dc334fafa70</uuid>
+            <template>Certificate expiration date Template</template>
+            <name>Certificate expiration date Template</name>
+            <description>## Author - Maxim Stepanuk
+
+Zabbix template for checking certificate for expiration date
+============================
+**Features:**
+Tracks certificate expiration date</description>
+            <groups>
+                <group>
+                    <name>Template/SMIDA</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>bd61f7fe0c0d4eb18603c39a9833d248</uuid>
+                    <name>Discovery</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>ssl.discovery[{$SITES_SSL_CHECK}]</key>
+                    <lifetime>3600</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>12dc94dfde79497c9a162ad299e61699</uuid>
+                            <name>{#SITE}</name>
+                            <type>ZABBIX_ACTIVE</type>
+                            <key>ssl.days[&quot;{#SITE}&quot;]</key>
+                            <delay>10m</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>d</units>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>72000</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>SSL</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>d956e4d6bfb54967b4ae8daa0f99ec65</uuid>
+                                    <expression>last(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])&lt;={$HIGH_DAYS_SSL_CHECK}</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>(last(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])&gt;{#DAYS_EXPIRE} or nodata(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;],72000)=1) or change(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])=1</recovery_expression>
+                                    <name>The certificate of the site {#SITE} expires after {#DAYS_EXPIRE} days</name>
+                                    <priority>HIGH</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>65d760c6eb554f789c337f2b081f3966</uuid>
+                                    <expression>last(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])&lt;={$WARN_DAYS_SSL_CHECK} and last(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])&gt;={$HIGH_DAYS_SSL_CHECK}+1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])&gt;{#DAYS_EXPIRE} or last(/Certificate expiration date Template/ssl.days[&quot;{#SITE}&quot;])&gt;{$WARN_DAYS_SSL_CHECK}</recovery_expression>
+                                    <name>The certificate of the site {#SITE} expires after {#DAYS_EXPIRE} days</name>
+                                    <priority>WARNING</priority>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$HIGH_DAYS_SSL_CHECK}</macro>
+                    <value>3</value>
+                </macro>
+                <macro>
+                    <macro>{$SITES_SSL_CHECK}</macro>
+                </macro>
+                <macro>
+                    <macro>{$WARN_DAYS_SSL_CHECK}</macro>
+                    <value>14</value>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>
