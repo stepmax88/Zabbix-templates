@@ -35,14 +35,16 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
         UserParameter=ssl.days[*], echo -n $(( ($$(date -d "$$(echo | openssl s_client -servername $1 -connect $1 2>/dev/null | openssl x509 -noout -enddate | sed -e 's#notAfter=##')" '+%s') - $$(date '+%s')) / 86400 ))
 
 
-*Note: Add the -e switch after echo if it doesn't work*
+*Note: Add the -e switch after echo, in the ssl.discovery element if it doesn't work.*
 
 2. Import "template_cert_expire_date.xml" into zabbix as template
 3. Restart zabbix_agent
 
 ## Testing
 
-    zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]'
+    zabbix_get -s <ip> -k 'ssl.discovery[amazon.com:443 google.com:443]'    
+
+___
 
     {
         "data":[
@@ -57,6 +59,11 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
         }
         ]
     }
+         
+
+   
+___
+
 
 
     zabbix_get -s <ip> -k 'ssl.days[<site>:443]'
