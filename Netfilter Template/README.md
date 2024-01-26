@@ -67,32 +67,26 @@ add that UserParameter to config:
 ### EXAMPLE:
 
 
->  {
->        "data":[
->        {
->                "{#IPSET}":"<name_ipset>",
->                "{#IP}":"<ip_addresses>"
->        }
->        ,
->        {
->                "{#TIMEIPSET}":"<name_ipset>",
->                "{#TIMEIP}":"<ip_addresses>",
->                "{#TIMEOUT}":"<ipset_timeout>"
->        }
->        ]
->  }
+  {
+        "data":[
+        {
+                "{#IPSET}":"<name_ipset>",
+                "{#IP}":"<ip_addresses>"
+        }
+        ,
+        {
+                "{#TIMEIPSET}":"<name_ipset>",
+                "{#TIMEIP}":"<ip_addresses>",
+                "{#TIMEOUT}":"<ipset_timeout>"
+        }
+        ]
+  }
 
 
         zabbix_get -s <ip> -k 'ipset.members["<name_ipset>","<ip_addresses>"]'
-
-
-
+#
         zabbix_get -s <ip> -k 'service.netfilter'
-
-
-
+#
         zabbix_get -s <ip> -k 'service.ipset'
-
-
-
+#
         zabbix_get -s <ip> -k 'service.ipset'
