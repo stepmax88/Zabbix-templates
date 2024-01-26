@@ -61,11 +61,9 @@ add that UserParameter to config:
 5. Restart zabbix_agent
 
 ## Testing
+#### EXAMPLE:
 
         zabbix_get -s <ip> -k 'ipset.discovery'
-
-### EXAMPLE:
-
 
 {
         "data":[
