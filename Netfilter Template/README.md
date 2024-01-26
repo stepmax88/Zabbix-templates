@@ -66,18 +66,31 @@ add that UserParameter to config:
         zabbix_get -s <ip> -k 'ipset.discovery'
 
 `{`
+
 `  "data":[`
+
 `    {`
+
 `      "{#IPSET}":"<name_ipset>",`
+
 `      "{#IP}":"<ip_addresses>"`
+
 `    }`
+
 `    ,`
+
 `    {`
+
 `      "{#TIMEIPSET}":"<name_ipset>",`
+
 `      "{#TIMEIP}":"<ip_addresses>",`
+
 `      "{#TIMEOUT}":"<ipset_timeout>"`
+
 `    }`
+
 `  ]`
+
 `}`
 
 
