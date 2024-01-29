@@ -1,8 +1,10 @@
+![](https://habrastorage.org/getpro/habr/post_images/6ab/8bc/2be/6ab8bc2be9d3c4ff89a47783a9ac5626.png)
+
 # Zabbix Patroni Template
 
 ## Zabbix template for patroni monitoring.
 
-### Author: Maxim Stepanuk (stepanukmaxim@icloud.com)
+### Author: Maxim Stepanuk (stepanukmaxim@prostep.com.ua)
 
 ## Requires
 
