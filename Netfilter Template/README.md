@@ -87,4 +87,4 @@ add that UserParameter to config:
 #
         zabbix_get -s <ip> -k 'service.ipset'
 #
-        zabbix_get -s <ip> -k 'service.ipset'
+        zabbix_get -s <ip> -k 'service.iptables'
