@@ -4,7 +4,7 @@
     <date>2022-07-07T10:21:31Z</date>
     <groups>
         <group>
-            <name>Template/SMIDA</name>
+            <name>Template</name>
         </group>
     </groups>
     <templates>
@@ -14,7 +14,7 @@
             <description>Author: Stepanuk Maxim</description>
             <groups>
                 <group>
-                    <name>Template/SMIDA</name>
+                    <name>Template</name>
                 </group>
             </groups>
             <applications>
