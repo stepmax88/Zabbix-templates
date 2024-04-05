@@ -1,0 +1,1020 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2024-04-05T08:02:58Z</date>
+    <groups>
+        <group>
+            <uuid>a571c0d144b14fd4a87a9d9b2aa9fcd6</uuid>
+            <name>Templates/Applications</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>1904722860fe4f39a8adb9a40b49e653</uuid>
+            <template>Template Patroni</template>
+            <name>Template Patroni</name>
+            <description>Author: Stepanuk Maxim</description>
+            <groups>
+                <group>
+                    <name>Templates/Applications</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>f569af6bbcdf4fc69752fbfc2fcef25b</uuid>
+                    <name>Patroni database_system_identifier</name>
+                    <type>DEPENDENT</type>
+                    <key>database_system_identifier</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Идентификатор системы базы данных — это 64-битное целое число без знака, содержащееся в файле pg_control, которое предназначено для предоставления идентификатора для кластера базы данных. Оно извлекается из системного времени при инициализации кластера и не содержит никакой другой информации об установке или системе, в которой он работает. Внутренний идентификатор системы базы данных используется в резервной системе для проверки того, что считываемые файлы WAL происходят из одной и той же системы (это означает, что все базы данных в кластере потоковой репликации будут использовать один и тот же идентификатор).</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.database_system_identifier</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>5e52114567c949c4a37f5662704f42f5</uuid>
+                            <expression>(last(/Template Patroni/database_system_identifier,#1)&lt;&gt;last(/Template Patroni/database_system_identifier,#2))=1</expression>
+                            <name>Change patroni database_system_identifier</name>
+                            <priority>INFO</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>375837c5d9c249e3b47cdd23d704c84c</uuid>
+                    <name>Patroni node name leader</name>
+                    <type>DEPENDENT</type>
+                    <key>leader.cluster</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.members[?(@.role == 'leader')].name</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>RTRIM</type>
+                            <parameters>
+                                <parameter>&quot;]</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>LTRIM</type>
+                            <parameters>
+                                <parameter>[&quot;</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.cluster[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cb509a3949804138909975a1fc220b46</uuid>
+                    <name>Patroni config: Loop_wait</name>
+                    <type>DEPENDENT</type>
+                    <key>loop_wait</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>7d</trends>
+                    <units>s</units>
+                    <description>The number of seconds the loop will sleep. Default value: 10, minimum possible value: 1
+
+Количество секунд, в течение которых цикл Patroni будет находиться в режиме ожидания. Значение по умолчанию: 10, минимально возможное значение: 1</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.loop_wait</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>348660e9ab854a3e8883a8a7364bdcd8</uuid>
+                    <name>Patroni config: Maintenance_work_mem</name>
+                    <type>DEPENDENT</type>
+                    <key>maintenance_work_mem</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Задаёт максимальный объём памяти для операций обслуживания БД, в частности VACUUM, CREATE INDEX и ALTER TABLE ADD FOREIGN KEY. По умолчанию его значение — 64 мегабайта (64MB). Так как в один момент времени в сеансе может выполняться только одна такая операция, и обычно они не запускаются параллельно, это значение вполне может быть гораздо больше work_mem. Увеличение этого значения может привести к ускорению операций очистки и восстановления БД из копии.
+
+Учтите, что когда выполняется автоочистка, этот объём может быть выделен autovacuum_max_workers раз, поэтому не стоит устанавливать значение по умолчанию слишком большим. Возможно, будет лучше управлять объёмом памяти для автоочистки отдельно, изменяя autovacuum_work_mem.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.postgresql.parameters.maintenance_work_mem</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b8f4ff57c98e4096b8d62b391e3903c6</uuid>
+                    <name>Patroni config: Maximum_lag_on_failover</name>
+                    <type>DEPENDENT</type>
+                    <key>maximum_lag_on_failover</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>B</units>
+                    <description>The maximum bytes a follower may lag to be able to participate in leader election.
+
+Максимальное количество байтов, которое может отставать ведомый, чтобы иметь возможность участвовать в выборах лидера.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.maximum_lag_on_failover</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>8dcecd0e25bc4c079cd6503d4f782a5f</uuid>
+                    <name>Patroni name</name>
+                    <type>DEPENDENT</type>
+                    <key>name</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <status>DISABLED</status>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni.name</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>1bf25cb2561f47ebb0e729d56e36d8dc</uuid>
+                    <name>Patroni Cluster</name>
+                    <type>HTTP_AGENT</type>
+                    <key>patroni.cluster[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    <delay>30s</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <url>http://{$LISTEN_IP_PATRONI}:{$LISTEN_PORT_PATRONI}/cluster</url>
+                </item>
+                <item>
+                    <uuid>1d82c13351744287b8debb0d71a5ad8c</uuid>
+                    <name>Patroni Config</name>
+                    <type>HTTP_AGENT</type>
+                    <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <url>http://{$LISTEN_IP_PATRONI}:{$LISTEN_PORT_PATRONI}/config</url>
+                    <triggers>
+                        <trigger>
+                            <uuid>0ab3d95d05bf4bc59ad19d42ae8fd967</uuid>
+                            <expression>change(/Template Patroni/patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}])=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>last(/Template Patroni/patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}],#1)=last(/Template Patroni/patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}],#2)</recovery_expression>
+                            <name>Patroni configuration changed to {HOST.NAME}</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>2b79c0fa18714fe1bd44456b62d1d09b</uuid>
+                    <name>Patroni history</name>
+                    <type>HTTP_AGENT</type>
+                    <key>patroni.history[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <url>http://{$LISTEN_IP_PATRONI}:{$LISTEN_PORT_PATRONI}/history</url>
+                </item>
+                <item>
+                    <uuid>e0b541aa0df64c2c8cac6531daa9b188</uuid>
+                    <name>Patroni info</name>
+                    <type>HTTP_AGENT</type>
+                    <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <url>http://{$LISTEN_IP_PATRONI}:{$LISTEN_PORT_PATRONI}/patroni</url>
+                </item>
+                <item>
+                    <uuid>cb7eec59636f414eacd68cc87fda5008</uuid>
+                    <name>Patroni leader (Consul)</name>
+                    <type>HTTP_AGENT</type>
+                    <key>patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}]</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>RTRIM</type>
+                            <parameters>
+                                <parameter>]</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>LTRIM</type>
+                            <parameters>
+                                <parameter>[</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.Value</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>return atob(value)</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <timeout>5s</timeout>
+                    <url>{$CONSUL.URL}/v1/kv/service/{$CONSUL.PATRONI_SERVICE_NAME}/leader</url>
+                    <follow_redirects>NO</follow_redirects>
+                    <headers>
+                        <header>
+                            <name>X-Consul-Token</name>
+                            <value>{$CONSUL.TOKEN}</value>
+                        </header>
+                    </headers>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>89c2fa7ed9dd476eaeb345395d176326</uuid>
+                            <expression>(last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}],#1)&lt;&gt;last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}],#2))=1 and length(last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}]))&gt;0</expression>
+                            <name>Change patroni Leader</name>
+                            <status>DISABLED</status>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>76ca01d35a4b4e1faef70f59fb0b0280</uuid>
+                    <name>Patroni pending_restart</name>
+                    <type>DEPENDENT</type>
+                    <key>pending_restart</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.pending_restart</parameter>
+                            </parameters>
+                            <error_handler>CUSTOM_VALUE</error_handler>
+                            <error_handler_params>False</error_handler_params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>47cc5d2dd04447648446897d51c3ad0b</uuid>
+                            <expression>last(/Template Patroni/pending_restart,#1)=&quot;true&quot; and last(/Template Patroni/pending_restart,#2)=&quot;False&quot;</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>last(/Template Patroni/pending_restart,#1)=&quot;False&quot; and last(/Template Patroni/pending_restart,#2)=&quot;False&quot;</recovery_expression>
+                            <name>Patroni pending restart</name>
+                            <priority>AVERAGE</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>affef3410b634e77aea36928fc0907c6</uuid>
+                    <name>Patroni config: Port</name>
+                    <type>DEPENDENT</type>
+                    <key>port</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <description>TCP-порт, который прослушивает сервер; 5432 по умолчанию. Обратите внимание, что один и тот же номер порта используется для всех IP-адресов, на которых прослушивает сервер. Этот параметр можно установить только при запуске сервера.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.postgresql.parameters.port</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>53e98eaba4ee49d9bd4e22f61756b0bb</uuid>
+                    <name>Patroni service is running</name>
+                    <key>proc.num[patroni]</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>6766166f0e0241d38faffe2000e7c27e</uuid>
+                            <expression>last(/Template Patroni/proc.num[patroni])=0</expression>
+                            <name>Patroni service is down on {HOST.NAME}</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>715b14838aca4c0386f8b37c40b09a8e</uuid>
+                    <name>Patroni replication_state</name>
+                    <type>DEPENDENT</type>
+                    <key>replication_state</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.replication_state</parameter>
+                            </parameters>
+                            <error_handler>CUSTOM_VALUE</error_handler>
+                            <error_handler_params>replicator</error_handler_params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>6f0d9cb0147342cbbb8a64f77f3bb1a0</uuid>
+                    <name>Patroni config: Retry_timeout</name>
+                    <type>DEPENDENT</type>
+                    <key>retry_timeout</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>7d</trends>
+                    <units>s</units>
+                    <description>Timeout for DCS and PostgreSQL operation retries (in seconds). DCS or network issues shorter than this will not cause Patroni to demote the leader. Default value: 10, minimum possible value: 3
+
+Тайм-аут для повторных пыток операций DCS и PostgreSQL (в секундах). DCS или сетевые проблемы меньшее по времени, не заставят Patroni понизить лидера. Значение по умолчанию: 10, минимально возможное значение: 3</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.retry_timeout</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>220f4f9087e2451aa3905ac931bd5013</uuid>
+                    <name>Patroni role</name>
+                    <type>DEPENDENT</type>
+                    <key>role</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <status>DISABLED</status>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.role</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4acb7f0045ed431a8b85e56d4e91527c</uuid>
+                    <name>Patroni scope</name>
+                    <type>DEPENDENT</type>
+                    <key>scope</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni.scope</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>65327510042848d99acd2202e2e46bcf</uuid>
+                    <name>Patroni config: Shared_buffers</name>
+                    <type>DEPENDENT</type>
+                    <key>shared_buffers</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Задаёт объём памяти, который будет использовать сервер баз данных для буферов в разделяемой памяти. По умолчанию это обычно 128 мегабайт (128MB), но может быть и меньше, если конфигурация вашего ядра накладывает дополнительные ограничения (это определяется в процессе initdb). Это значение не должно быть меньше 128 килобайт. Однако для хорошей производительности обычно требуются гораздо большие значения. Если это значение задаётся без единиц измерения, оно считается заданным в блоках (размер которых равен BLCKSZ байт, обычно это 8 КБ). Минимальное допустимое значение зависит от величины BLCKSZ. Задать этот параметр можно только при запуске сервера.
+
+Если вы используете выделенный сервер с объёмом ОЗУ 1 ГБ и более, разумным начальным значением shared_buffers будет 25% от объёма памяти. Существуют варианты нагрузки, при которых эффективны будут и ещё большие значения shared_buffers, но так как PostgreSQL использует и кеш операционной системы, выделять для shared_buffers более 40% ОЗУ вряд ли будет полезно. При увеличении shared_buffers обычно требуется соответственно увеличить max_wal_size, чтобы растянуть процесс записи большого объёма новых или изменённых данных на более продолжительное время.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.postgresql.parameters.shared_buffers</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>12d425a5149b45378b4cee3560e93467</uuid>
+                    <name>Patroni state</name>
+                    <type>DEPENDENT</type>
+                    <key>state</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <status>DISABLED</status>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.state</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cd7f84edc23e4ae58c539960463f1a0b</uuid>
+                    <name>Patroni config: ttl</name>
+                    <type>DEPENDENT</type>
+                    <key>ttl</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>7d</trends>
+                    <units>s</units>
+                    <description>The TTL to acquire the leader lock (in seconds). Length of time before initiation of the automatic failover process. Default value: 30, minimum possible value: 20
+
+TTL для получения блокировки лидера (в секундах).  Продолжительность времени до начала автоматического аварийного переключения. Значение по умолчанию: 30, минимально возможное значение: 20</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.ttl</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>0594da7c05d649ec917df3bca1f50e8d</uuid>
+                    <name>Patroni version</name>
+                    <type>DEPENDENT</type>
+                    <key>version</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.patroni.version</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>3600</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4eac3c5f22314e928fcfaeb5bbe97056</uuid>
+                            <expression>(last(/Template Patroni/version,#1)&lt;&gt;last(/Template Patroni/version,#2))=1</expression>
+                            <name>Change patroni version</name>
+                            <priority>INFO</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>94c3f5a293e044ea9b340b1dce23fdc1</uuid>
+                    <name>Patroni config: Work_mem</name>
+                    <type>DEPENDENT</type>
+                    <key>work_mem</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Задаёт базовый максимальный объём памяти, который будет использоваться во внутренних операциях при обработке запросов (например, для сортировки или хеш-таблиц), прежде чем будут задействованы временные файлы на диске. Если это значение задаётся без единиц измерения, оно считается заданным в килобайтах. Значение по умолчанию — четыре мегабайта (4MB). Заметьте, что в сложных запросах одновременно могут выполняться несколько операций сортировки и хеширования, и при этом примерно этот объём памяти может использоваться в каждой операции, прежде чем данные начнут вытесняться во временные файлы. Кроме того, такие операции могут выполняться одновременно в разных сеансах. Таким образом, общий объём памяти может многократно превосходить значение work_mem; это следует учитывать, выбирая подходящее значение. Операции сортировки используются для ORDER BY, DISTINCT и соединений слиянием. Хеш-таблицы используются при соединениях и агрегировании по хешу, мемоизации узлов, а также обработке подзапросов IN с применением хеша.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.postgresql.parameters.work_mem</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>b6d69191915e4563b4ca59ea4bc918dc</uuid>
+                    <name>Discovery Members</name>
+                    <type>DEPENDENT</type>
+                    <key>patroni.discovery</key>
+                    <delay>0</delay>
+                    <lifetime>3d</lifetime>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>6434a9366c874f8cb3ac839182de03f7</uuid>
+                            <name>Patroni lag: ({#NODE_NAME} - {#NODE_ROLE})</name>
+                            <type>DEPENDENT</type>
+                            <key>lag[&quot;{#NODE_NAME}&quot;]</key>
+                            <delay>0</delay>
+                            <history>14d</history>
+                            <trends>0</trends>
+                            <value_type>FLOAT</value_type>
+                            <units>B</units>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.members[?(@.name == '{#NODE_NAME}')].lag</parameter>
+                                    </parameters>
+                                    <error_handler>CUSTOM_VALUE</error_handler>
+                                    <error_handler_params>0</error_handler_params>
+                                </step>
+                                <step>
+                                    <type>RTRIM</type>
+                                    <parameters>
+                                        <parameter>]</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>LTRIM</type>
+                                    <parameters>
+                                        <parameter>[</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>patroni.cluster[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Patroni</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>a5cae1a7989a4c6897367749132e755c</uuid>
+                            <name>Patroni role: ({#NODE_NAME})</name>
+                            <type>DEPENDENT</type>
+                            <key>role[&quot;{#NODE_NAME}&quot;]</key>
+                            <delay>0</delay>
+                            <history>14d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.members[?(@.name == '{#NODE_NAME}')].role</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                                <step>
+                                    <type>RTRIM</type>
+                                    <parameters>
+                                        <parameter>&quot;]</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>LTRIM</type>
+                                    <parameters>
+                                        <parameter>[&quot;</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>patroni.cluster[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Patroni</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>9137a4ebaf8c449eabedcfff82125923</uuid>
+                            <name>Patroni state: ({#NODE_NAME})</name>
+                            <type>DEPENDENT</type>
+                            <key>state[&quot;{#NODE_NAME}&quot;]</key>
+                            <delay>0</delay>
+                            <history>14d</history>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.members[?(@.name == '{#NODE_NAME}')].state</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                                <step>
+                                    <type>RTRIM</type>
+                                    <parameters>
+                                        <parameter>&quot;]</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>LTRIM</type>
+                                    <parameters>
+                                        <parameter>[&quot;</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>patroni.cluster[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Patroni</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <uuid>a7e93007a9e94461803c33a9bf5638b6</uuid>
+                            <expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;])=&quot;leader&quot; and last(/Template Patroni/leader.cluster)={#NODE_NAME} and change(/Template Patroni/role)=1 and last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])={#NODE_NAME}</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;],#5)=&quot;leader&quot;</recovery_expression>
+                            <name>Change patroni leader: New leader {#NODE_NAME}</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <uuid>b5d215467465475cbcc30649f91eb85f</uuid>
+                            <expression>last(/Template Patroni/lag[&quot;{#NODE_NAME}&quot;])&gt;last(/Template Patroni/maximum_lag_on_failover)</expression>
+                            <name>Patroni lags {#NODE_NAME}</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>78322eeebddf415db86fd0eec151b60a</uuid>
+                            <name>Patroni Lag</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>1A7C11</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Patroni</host>
+                                        <key>lag[&quot;{#NODE_NAME}&quot;]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>274482</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>Template Patroni</host>
+                                        <key>lag[&quot;{#NODE_NAME}&quot;]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                    <master_item>
+                        <key>patroni.cluster[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
+                    </master_item>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>var data = JSON.parse(value);
+result = { &quot;data&quot;: []};
+data.members.forEach(function (member) {
+    result.data.push({   
+      &quot;{#NODE_STATE}&quot;: member.state,
+      &quot;{#NODE_API_URL}&quot;: member.api_url,
+      &quot;{#NODE_PORT}&quot;: member.port,
+      &quot;{#NODE_TIMELINE}&quot;: member.timeline,
+      &quot;{#NODE_HOST}&quot;: member.host,
+      &quot;{#NODE_NAME}&quot;: member.name,
+      &quot;{#NODE_ROLE}&quot;: member.role
+    });
+});
+return JSON.stringify(result);</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$CONSUL.PATRONI_SERVICE_NAME}</macro>
+                    <description>DCS - Consul: patroni service name</description>
+                </macro>
+                <macro>
+                    <macro>{$CONSUL.TOKEN}</macro>
+                    <description>DCS - Consul: token read service patroni</description>
+                </macro>
+                <macro>
+                    <macro>{$CONSUL.URL}</macro>
+                    <value>http://127.0.0.1:8500</value>
+                    <description>DCS - Consul: URL</description>
+                </macro>
+                <macro>
+                    <macro>{$LISTEN_IP_PATRONI}</macro>
+                    <value>127.0.0.1</value>
+                    <description>Listen ip adress service patroni</description>
+                </macro>
+                <macro>
+                    <macro>{$LISTEN_PORT_PATRONI}</macro>
+                    <value>8008</value>
+                    <description>Listen port service patroni</description>
+                </macro>
+            </macros>
+            <dashboards>
+                <dashboard>
+                    <uuid>0aa4175561b1452f825ca15c023b4976</uuid>
+                    <name>Replication Lag</name>
+                    <pages>
+                        <page>
+                            <widgets>
+                                <widget>
+                                    <type>GRAPH_PROTOTYPE</type>
+                                    <width>24</width>
+                                    <height>10</height>
+                                    <hide_header>YES</hide_header>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>source_type</name>
+                                            <value>3</value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>rows</name>
+                                            <value>2</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM_PROTOTYPE</type>
+                                            <name>itemid</name>
+                                            <value>
+                                                <host>Template Patroni</host>
+                                                <key>lag[&quot;{#NODE_NAME}&quot;]</key>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                    </pages>
+                </dashboard>
+            </dashboards>
+            <valuemaps>
+                <valuemap>
+                    <uuid>b4136bc70f1e4f94993f5288934bd057</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>e63466cf535345b88ef51f5d6c0a981e</uuid>
+            <expression>last(/Template Patroni/role,#3)=&quot;replica&quot; and last(/Template Patroni/replication_state,#3)=&quot;replicator&quot;</expression>
+            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+            <recovery_expression>last(/Template Patroni/role,#2)=&quot;replica&quot; and last(/Template Patroni/replication_state,#2)=&quot;streaming&quot; or last(/Template Patroni/role,#2)=&quot;master&quot;</recovery_expression>
+            <name>Patroni replication is down on {HOST.NAME}</name>
+            <priority>HIGH</priority>
+            <manual_close>YES</manual_close>
+        </trigger>
+    </triggers>
+</zabbix_export>
