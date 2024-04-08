@@ -56,20 +56,21 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 2. Preprocessing (JavaScript)
 
 
-    var data = JSON.parse(value);
-    result = { "data": []};
-    data.members.forEach(function (member) {
-        result.data.push({   
-        "{#NODE_STATE}": member.state,
-        "{#NODE_API_URL}": member.api_url,
-        "{#NODE_PORT}": member.port,
-        "{#NODE_TIMELINE}": member.timeline,
-        "{#NODE_HOST}": member.host,
-        "{#NODE_NAME}": member.name,
-        "{#NODE_ROLE}": member.role
+
+        var data = JSON.parse(value);
+        result = { "data": []};
+        data.members.forEach(function (member) {
+            result.data.push({   
+            "{#NODE_STATE}": member.state,
+            "{#NODE_API_URL}": member.api_url,
+            "{#NODE_PORT}": member.port,
+            "{#NODE_TIMELINE}": member.timeline,
+            "{#NODE_HOST}": member.host,
+            "{#NODE_NAME}": member.name,
+            "{#NODE_ROLE}": member.role
+            });
         });
-    });
-    return JSON.stringify(result);
+        return JSON.stringify(result);
 
 
 ## Installation (version 1)
