@@ -11,27 +11,26 @@
 Zabbix >=3.4 (because the template uses dependent items and value preprocessing features that were introduced in 3.4)
 
 ## Metrics (version 2)
-| Metric                                           | Description                                                    |
-|--------------------------------------------------|----------------------------------------------------------------|
-| Patroni service is running                       | Status service                                                 |
-| Patroni info: Patroni version                    | Version Patroni app                                            |
-| Patroni info: Scope                              | Patroni cluster name                                           |
-| Patroni info: Patroni database_system_identifier | Database System ID                                             |
-| Patroni info: Patroni pending_restart            | True or False                                                  |
-| Patroni config: Ttl                              | Period of time before the automatic fail-over process starts   |
-| Patroni config: Retry_timeout                    | Timeout for retrying DCS and Postgres operations               |
-| Patroni config: Loop_wait                        | The number of seconds the loop will sleep                      |
-| Patroni config: Maximum_lag_on_failover          | The maximum bytes a follower may lag to be able to participate |
-|                                                  | in leader election                                             |
-| Patroni config: Work_mem                         | Sets the base maximum memory size                              |
-| Patroni config: Shared_buffers                   | Memory that the db server will use for shared memory buffers   |
-| Patroni config: Port                             | TCP port that the server is listening on                       |
-| Patroni config: Maintenance_work_mem             | Sets the max amount of mem for database maintenance operations |
-| Patroni history                                  |                                                                | 
-| Patroni leader (Consul)                          |                                                                |
-| (Prototype) Patroni state: (node)                | Patroni state running/streaming                                |
-| (Prototype) Patroni role: (node)                 | Patroni role leader/replica/sync_standby                       |
-| (Prototype) Patroni lag: (node - role)           | Replication delay                                              | 
+| Metric                                           | Description                                                                       |
+|--------------------------------------------------|-----------------------------------------------------------------------------------|
+| Patroni service is running                       | Status service                                                                    |
+| Patroni info: Patroni version                    | Version Patroni app                                                               |
+| Patroni info: Scope                              | Patroni cluster name                                                              |
+| Patroni info: Patroni database_system_identifier | Database System ID                                                                |
+| Patroni info: Patroni pending_restart            | True or False                                                                     |
+| Patroni config: Ttl                              | Period of time before the automatic fail-over process starts                      |
+| Patroni config: Retry_timeout                    | Timeout for retrying DCS and Postgres operations                                  |
+| Patroni config: Loop_wait                        | The number of seconds the loop will sleep                                         |
+| Patroni config: Maximum_lag_on_failover          | The maximum bytes a follower may lag to be able to participate in leader election |
+| Patroni config: Work_mem                         | Sets the base maximum memory size                                                 |
+| Patroni config: Shared_buffers                   | Memory that the db server will use for shared memory buffers                      |
+| Patroni config: Port                             | TCP port that the server is listening on                                          |
+| Patroni config: Maintenance_work_mem             | Sets the max amount of mem for database maintenance operations                    |
+| Patroni history                                  |                                                                                   | 
+| Patroni leader (Consul)                          |                                                                                   |
+| (Prototype) Patroni state: (node)                | Patroni state running/streaming                                                   |
+| (Prototype) Patroni role: (node)                 | Patroni role leader/replica/sync_standby                                          |
+| (Prototype) Patroni lag: (node - role)           | Replication delay                                                                 | 
 
 
 ## Triggers (version 2)
@@ -56,20 +55,22 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 
 2. Preprocessing (JavaScript)
 
-var data = JSON.parse(value);
-result = { "data": []};
-data.members.forEach(function (member) {
-    result.data.push({   
-      "{#NODE_STATE}": member.state,
-      "{#NODE_API_URL}": member.api_url,
-      "{#NODE_PORT}": member.port,
-      "{#NODE_TIMELINE}": member.timeline,
-      "{#NODE_HOST}": member.host,
-      "{#NODE_NAME}": member.name,
-      "{#NODE_ROLE}": member.role
+
+    var data = JSON.parse(value);
+    result = { "data": []};
+    data.members.forEach(function (member) {
+        result.data.push({   
+        "{#NODE_STATE}": member.state,
+        "{#NODE_API_URL}": member.api_url,
+        "{#NODE_PORT}": member.port,
+        "{#NODE_TIMELINE}": member.timeline,
+        "{#NODE_HOST}": member.host,
+        "{#NODE_NAME}": member.name,
+        "{#NODE_ROLE}": member.role
+        });
     });
-});
-return JSON.stringify(result);
+    return JSON.stringify(result);
+
 
 ## Installation (version 1)
 
