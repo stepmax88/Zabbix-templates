@@ -34,14 +34,15 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 
 
 ## Triggers (version 2)
-|     Trigger                  |  Description                         |
-|------------------------------|--------------------------------------|
-| Change patroni role          | AVERAGE: Change role Master/Replica  |
-| Patroni service is down      | HIGH: Status service                 |
-| Change patroni configuration | INFO: Change configuration.          |
-| Change patroni leader        | HIGH: Change leader                  |
-| Change patroni version       | INFO: Change version                 |
-| Change patroni state.        | AVERAGE: Change state members.       |
+| Trigger                                                    | Description                               |
+|------------------------------------------------------------|-------------------------------------------|
+| Change patroni database_system_identifier                  | INFO: Change DB_ID                        |
+| Change patroni version                                     | INFO: Change version                      |
+| Patroni configuration changed to {HOST.NAME}               | AVERAGE: Change configuration             |
+| Patroni pending restart                                    | AVERAGE: Patroni node need restart        |
+| Patroni service is down on {HOST.NAME}                     | HIGH: Status service                      | 
+| (Prototype) Patroni lags {#NODE_NAME}                      | HIGH: Excess size maximum_lag_on_failover | 
+| (Prototype) Change patroni leader: New leader {#NODE_NAME} | HIGH: Change leader                       |
 
 
 ## Installation (version 2)
