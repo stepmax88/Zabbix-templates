@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2024-04-05T08:02:58Z</date>
+    <date>2024-04-09T07:20:45Z</date>
     <groups>
         <group>
             <uuid>a571c0d144b14fd4a87a9d9b2aa9fcd6</uuid>
@@ -22,7 +22,7 @@
             <items>
                 <item>
                     <uuid>f569af6bbcdf4fc69752fbfc2fcef25b</uuid>
-                    <name>Patroni database_system_identifier</name>
+                    <name>Patroni info: Database_system_identifier</name>
                     <type>DEPENDENT</type>
                     <key>database_system_identifier</key>
                     <delay>0</delay>
@@ -65,12 +65,13 @@
                 </item>
                 <item>
                     <uuid>375837c5d9c249e3b47cdd23d704c84c</uuid>
-                    <name>Patroni node name leader</name>
+                    <name>Patroni Cluster: Leader</name>
                     <type>DEPENDENT</type>
                     <key>leader.cluster</key>
                     <delay>0</delay>
                     <history>7d</history>
                     <trends>0</trends>
+                    <status>DISABLED</status>
                     <value_type>TEXT</value_type>
                     <preprocessing>
                         <step>
@@ -194,34 +195,6 @@
                     </tags>
                 </item>
                 <item>
-                    <uuid>8dcecd0e25bc4c079cd6503d4f782a5f</uuid>
-                    <name>Patroni name</name>
-                    <type>DEPENDENT</type>
-                    <key>name</key>
-                    <delay>0</delay>
-                    <history>7d</history>
-                    <trends>0</trends>
-                    <status>DISABLED</status>
-                    <value_type>TEXT</value_type>
-                    <preprocessing>
-                        <step>
-                            <type>JSONPATH</type>
-                            <parameters>
-                                <parameter>$.patroni.name</parameter>
-                            </parameters>
-                        </step>
-                    </preprocessing>
-                    <master_item>
-                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
-                    </master_item>
-                    <tags>
-                        <tag>
-                            <tag>Application</tag>
-                            <value>Patroni</value>
-                        </tag>
-                    </tags>
-                </item>
-                <item>
                     <uuid>1bf25cb2561f47ebb0e729d56e36d8dc</uuid>
                     <name>Patroni Cluster</name>
                     <type>HTTP_AGENT</type>
@@ -277,6 +250,12 @@
                         </step>
                     </preprocessing>
                     <url>http://{$LISTEN_IP_PATRONI}:{$LISTEN_PORT_PATRONI}/history</url>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Patroni</value>
+                        </tag>
+                    </tags>
                 </item>
                 <item>
                     <uuid>e0b541aa0df64c2c8cac6531daa9b188</uuid>
@@ -343,16 +322,6 @@
                             <value>Patroni</value>
                         </tag>
                     </tags>
-                    <triggers>
-                        <trigger>
-                            <uuid>89c2fa7ed9dd476eaeb345395d176326</uuid>
-                            <expression>(last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}],#1)&lt;&gt;last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}],#2))=1 and length(last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}]))&gt;0</expression>
-                            <name>Change patroni Leader</name>
-                            <status>DISABLED</status>
-                            <priority>HIGH</priority>
-                            <manual_close>YES</manual_close>
-                        </trigger>
-                    </triggers>
                 </item>
                 <item>
                     <uuid>76ca01d35a4b4e1faef70f59fb0b0280</uuid>
@@ -453,6 +422,7 @@
                     <delay>0</delay>
                     <history>7d</history>
                     <trends>0</trends>
+                    <status>DISABLED</status>
                     <value_type>TEXT</value_type>
                     <preprocessing>
                         <step>
@@ -505,36 +475,8 @@
                     </tags>
                 </item>
                 <item>
-                    <uuid>220f4f9087e2451aa3905ac931bd5013</uuid>
-                    <name>Patroni role</name>
-                    <type>DEPENDENT</type>
-                    <key>role</key>
-                    <delay>0</delay>
-                    <history>7d</history>
-                    <trends>0</trends>
-                    <status>DISABLED</status>
-                    <value_type>TEXT</value_type>
-                    <preprocessing>
-                        <step>
-                            <type>JSONPATH</type>
-                            <parameters>
-                                <parameter>$.role</parameter>
-                            </parameters>
-                        </step>
-                    </preprocessing>
-                    <master_item>
-                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
-                    </master_item>
-                    <tags>
-                        <tag>
-                            <tag>Application</tag>
-                            <value>Patroni</value>
-                        </tag>
-                    </tags>
-                </item>
-                <item>
                     <uuid>4acb7f0045ed431a8b85e56d4e91527c</uuid>
-                    <name>Patroni scope</name>
+                    <name>Patroni info: Scope</name>
                     <type>DEPENDENT</type>
                     <key>scope</key>
                     <delay>0</delay>
@@ -581,40 +523,6 @@
                     </preprocessing>
                     <master_item>
                         <key>patroni.config[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
-                    </master_item>
-                    <tags>
-                        <tag>
-                            <tag>Application</tag>
-                            <value>Patroni</value>
-                        </tag>
-                    </tags>
-                </item>
-                <item>
-                    <uuid>12d425a5149b45378b4cee3560e93467</uuid>
-                    <name>Patroni state</name>
-                    <type>DEPENDENT</type>
-                    <key>state</key>
-                    <delay>0</delay>
-                    <history>7d</history>
-                    <trends>0</trends>
-                    <status>DISABLED</status>
-                    <value_type>TEXT</value_type>
-                    <preprocessing>
-                        <step>
-                            <type>JSONPATH</type>
-                            <parameters>
-                                <parameter>$.state</parameter>
-                            </parameters>
-                        </step>
-                        <step>
-                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
-                            <parameters>
-                                <parameter>3600</parameter>
-                            </parameters>
-                        </step>
-                    </preprocessing>
-                    <master_item>
-                        <key>patroni.info[{$LISTEN_IP_PATRONI},{$LISTEN_PORT_PATRONI}]</key>
                     </master_item>
                     <tags>
                         <tag>
@@ -854,12 +762,30 @@ TTL для получения блокировки лидера (в секунд
                                     <value>Patroni</value>
                                 </tag>
                             </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>569581c611b34457a98f5c769124d32f</uuid>
+                                    <expression>change(/Template Patroni/state[&quot;{#NODE_NAME}&quot;])=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/Template Patroni/state[&quot;{#NODE_NAME}&quot;],#5)={#NODE_STATE}</recovery_expression>
+                                    <name>TEST Change patroni state: New state ({#NODE_NAME} - {#NODE_STATE})</name>
+                                    <priority>HIGH</priority>
+                                    <manual_close>YES</manual_close>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>Change patroni leader: New leader {#NODE_NAME}</name>
+                                            <expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;])=&quot;leader&quot; and last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])={#NODE_NAME} and change(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])=1 and last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])={#NODE_NAME}</expression>
+                                            <recovery_expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;],#5)=&quot;leader&quot;</recovery_expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
                             <uuid>a7e93007a9e94461803c33a9bf5638b6</uuid>
-                            <expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;])=&quot;leader&quot; and last(/Template Patroni/leader.cluster)={#NODE_NAME} and change(/Template Patroni/role)=1 and last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])={#NODE_NAME}</expression>
+                            <expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;])=&quot;leader&quot; and last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])={#NODE_NAME} and change(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])=1 and last(/Template Patroni/patroni.leader[{$CONSUL.TOKEN},{$CONSUL.PATRONI_SERVICE_NAME}])={#NODE_NAME}</expression>
                             <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
                             <recovery_expression>last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;],#5)=&quot;leader&quot;</recovery_expression>
                             <name>Change patroni leader: New leader {#NODE_NAME}</name>
@@ -868,7 +794,7 @@ TTL для получения блокировки лидера (в секунд
                         </trigger_prototype>
                         <trigger_prototype>
                             <uuid>b5d215467465475cbcc30649f91eb85f</uuid>
-                            <expression>last(/Template Patroni/lag[&quot;{#NODE_NAME}&quot;])&gt;last(/Template Patroni/maximum_lag_on_failover)</expression>
+                            <expression>last(/Template Patroni/lag[&quot;{#NODE_NAME}&quot;])&gt;last(/Template Patroni/maximum_lag_on_failover) and last(/Template Patroni/role[&quot;{#NODE_NAME}&quot;])=&quot;leader&quot;</expression>
                             <name>Patroni lags {#NODE_NAME}</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
@@ -1006,15 +932,4 @@ return JSON.stringify(result);</parameter>
             </valuemaps>
         </template>
     </templates>
-    <triggers>
-        <trigger>
-            <uuid>e63466cf535345b88ef51f5d6c0a981e</uuid>
-            <expression>last(/Template Patroni/role,#3)=&quot;replica&quot; and last(/Template Patroni/replication_state,#3)=&quot;replicator&quot;</expression>
-            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
-            <recovery_expression>last(/Template Patroni/role,#2)=&quot;replica&quot; and last(/Template Patroni/replication_state,#2)=&quot;streaming&quot; or last(/Template Patroni/role,#2)=&quot;master&quot;</recovery_expression>
-            <name>Patroni replication is down on {HOST.NAME}</name>
-            <priority>HIGH</priority>
-            <manual_close>YES</manual_close>
-        </trigger>
-    </triggers>
 </zabbix_export>

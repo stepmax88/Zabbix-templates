@@ -26,8 +26,10 @@ Zabbix >=3.4 (because the template uses dependent items and value preprocessing 
 | Patroni config: Shared_buffers                   | Memory that the db server will use for shared memory buffers                      |
 | Patroni config: Port                             | TCP port that the server is listening on                                          |
 | Patroni config: Maintenance_work_mem             | Sets the max amount of mem for database maintenance operations                    |
-| Patroni history                                  |                                                                                   | 
-| Patroni leader (Consul)                          |                                                                                   |
+| Patroni history                                  | Shows the history of switchovers/failovers in a Cluster                           | 
+| Patroni leader (Consul)                          | Shows who is currently the Leader (we receive information from the Consul)        |
+| Patroni Cluster: Leader                          | Shows who is currently the Leader (Disabled by default)                           |
+| Patroni replication_state                        | Patroni replication state replicator/streaming (Disabled by default)              | 
 | (Prototype) Patroni state: (node)                | Patroni state running/streaming                                                   |
 | (Prototype) Patroni role: (node)                 | Patroni role leader/replica/sync_standby                                          |
 | (Prototype) Patroni lag: (node - role)           | Replication delay                                                                 | 
